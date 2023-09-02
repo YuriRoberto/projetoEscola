@@ -595,6 +595,60 @@ void printStudentLowMatter(Student listStudent[], int tam) {
   }
 }
 
+int compareStudentsByBirthDate(const void *a, const void *b) {
+  const Student *studentA = (const Student *)a;
+  const Student *studentB = (const Student *)b;
+
+  // Primeiro, compare anos de nascimento
+  if (studentA->birthDay.year < studentB->birthDay.year) {
+    return -1;
+  } else if (studentA->birthDay.year > studentB->birthDay.year) {
+    return 1;
+  } else {
+    // Se os anos de nascimento forem iguais, compare meses de nascimento
+    if (studentA->birthDay.month < studentB->birthDay.month) {
+      return -1;
+    } else if (studentA->birthDay.month > studentB->birthDay.month) {
+      return 1;
+    } else {
+      // Se os meses de nascimento forem iguais, compare dias de nascimento
+      if (studentA->birthDay.day < studentB->birthDay.day) {
+        return -1;
+      } else if (studentA->birthDay.day > studentB->birthDay.day) {
+        return 1;
+      } else {
+        // Se todas as datas de nascimento forem iguais, retorne 0
+        return 0;
+      }
+    }
+  }
+}
+
+void printStudentsByBirthDate(Student listStudent[], int numStudents) {
+  // Primeiro, ordene o vetor de alunos por data de nascimento
+  qsort(listStudent, numStudents, sizeof(Student), compareStudentsByBirthDate);
+
+  // Agora, imprima a lista ordenada
+  printf("Alunos ordenados por data de nascimento:\n");
+  for (int i = 0; i < numStudents; i++) {
+    printf("Matricula: %d, Nome: %s, Data de Nascimento: %d/%d/%d\n",
+           listStudent[i].registration, listStudent[i].name,
+           listStudent[i].birthDay.day, listStudent[i].birthDay.month,
+           listStudent[i].birthDay.year);
+  }
+}
+
+void printTeachersByBirthDate(Teacher listTeacher[], int numTeachers) {
+  qsort(listTeacher, numTeachers, sizeof(Teacher), compareStudentsByBirthDate);
+  printf("Alunos ordenados por data de nascimento:\n");
+  for (int i = 0; i < numTeachers; i++) {
+    printf("Matricula: %d, Nome: %s, Data de Nascimento: %d/%d/%d\n",
+           listTeacher[i].registration, listTeacher[i].name,
+           listTeacher[i].birthDay.day, listTeacher[i].birthDay.month,
+           listTeacher[i].birthDay.year);
+  }
+}
+
 int main(void) {
   int indexStudent = 3, indexTeacher = 3, indexMatter = 0;
   int start = 1;
@@ -721,6 +775,14 @@ int main(void) {
     if (opcao == 19) {
       printf("Listando alunos:\n");
       printStudentLowMatter(listStudent, indexStudent);
+    }
+    if (opcao == 20) {
+      printf("Listando alunos por data de nascimento:\n");
+      printStudentsByBirthDate(listStudent, indexStudent);
+    }
+    if (opcao == 21) {
+      printf("Listando professores por data de nascimento:\n");
+      printTeachersByBirthDate(listTeacher, indexTeacher);
     }
   }
   return 1;
